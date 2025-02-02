@@ -8,7 +8,7 @@ const Login = () => {
         <p>Please log in using one of the following:</p>
         <div style={styles.buttonContainer}>
           <a
-            href={`${process.env.REACT_APP_BACKEND_URL}/auth/google`}
+            href={`${process.env.REACT_APP_BACKEND_URL}auth/google`}
             style={{ ...styles.button, ...styles.google }}
           >
             Login with Google

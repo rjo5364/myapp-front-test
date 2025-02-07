@@ -306,7 +306,7 @@ const styles = {
     backgroundColor: "#0077b5",
     color: "white",
     padding: "10px 20px",
-    textAlign: "center",
+    textAlign: "left",
     fontSize: "2rem",
   },
   mainContent: {
@@ -372,6 +372,9 @@ const styles = {
     fontWeight: "500",
     marginTop: "auto",
     transition: "background-color 0.2s ease",
+    marginLeft: "auto",
+    marginRight: "auto",
+    
   },
 };
 

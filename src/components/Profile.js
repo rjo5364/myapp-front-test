@@ -157,18 +157,77 @@ const Profile = () => {
 
   return (
     <div style={styles.container}>
-      <div style={styles.profile}>
-        <h1>Welcome, {user.name}!</h1>
-        {user.profilePicture && <img src={user.profilePicture} alt="Profile" style={styles.image} />}
-        <p style={styles.email}>Email: {user.email}</p>
-        <p style={styles.lastLogin}>Last login: {new Date(user.lastLogin).toLocaleString()}</p>
-        <button onClick={handleLogout} style={styles.button}>
-          Logout
-        </button>
+      <div style={styles.topbar}>
+        <h1>MyProjects</h1>
       </div>
 
-      <div style={styles.projectTaskContainer}>
-        <div style={styles.projects}>
+      <div style={styles.mainContent}>
+        <div style={styles.sidebar}>
+          <h2>Welcome, {user.name}!</h2>
+          {user.profilePicture && <img src={user.profilePicture} alt="Profile" style={styles.image} />}
+          <p>Email: {user.email}</p>
+          <p>Last login: {new Date(user.lastLogin).toLocaleString()}</p>
+          <button onClick={handleLogout} style={styles.button}>Logout</button>
+
+          <div style={styles.formContainer}>
+            <h3>New Project</h3>
+            <input
+              type="text"
+              value={newProject.name}
+              onChange={(e) => setNewProject({ ...newProject, name: e.target.value })}
+              placeholder="Project Name"
+            />
+            <textarea
+              value={newProject.description}
+              onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
+              placeholder="Project Description"
+            />
+            <button onClick={handleAddProject}>Create</button>
+
+            <h3>New Task</h3>
+            <select
+              value={newTask.project}
+              onChange={(e) => setNewTask({ ...newTask, project: e.target.value })}
+            >
+              <option value="">Select Project</option>
+              {projects.map((project) => (
+                <option key={project._id} value={project._id}>
+                  {project.name}
+                </option>
+              ))}
+            </select>
+            <input
+              type="text"
+              value={newTask.name}
+              onChange={(e) => setNewTask({ ...newTask, name: e.target.value })}
+              placeholder="Task Name"
+            />
+            <input
+              type="number"
+              value={newTask.duration}
+              onChange={(e) => setNewTask({ ...newTask, duration: e.target.value })}
+              placeholder="Duration"
+            />
+            <input
+              type="date"
+              value={newTask.startDate}
+              onChange={(e) => setNewTask({ ...newTask, startDate: e.target.value })}
+            />
+            <input
+              type="date"
+              value={newTask.endDate}
+              onChange={(e) => setNewTask({ ...newTask, endDate: e.target.value })}
+            />
+            <textarea
+              value={newTask.description}
+              onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
+              placeholder="Task Description"
+            />
+            <button onClick={handleAddTask}>Create</button>
+          </div>
+        </div>
+
+        <div style={styles.content}>
           <h2>Current Projects</h2>
           <table style={styles.table}>
             <thead>
@@ -188,22 +247,7 @@ const Profile = () => {
               ))}
             </tbody>
           </table>
-          <h3>Create New Project</h3>
-          <input
-            type="text"
-            value={newProject.name}
-            onChange={(e) => setNewProject({ ...newProject, name: e.target.value })}
-            placeholder="Project Name"
-          />
-          <textarea
-            value={newProject.description}
-            onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
-            placeholder="Project Description"
-          />
-          <button onClick={handleAddProject}>Create</button>
-        </div>
 
-        <div style={styles.tasks}>
           <h2>Current Tasks</h2>
           <table style={styles.table}>
             <thead>
@@ -229,46 +273,6 @@ const Profile = () => {
               ))}
             </tbody>
           </table>
-          <h3>Create New Task</h3>
-          <select
-            value={newTask.project}
-            onChange={(e) => setNewTask({ ...newTask, project: e.target.value })}
-          >
-            <option value="">Select Project</option>
-            {projects.map((project) => (
-              <option key={project._id} value={project._id}>
-                {project.name}
-              </option>
-            ))}
-          </select>
-          <input
-            type="text"
-            value={newTask.name}
-            onChange={(e) => setNewTask({ ...newTask, name: e.target.value })}
-            placeholder="Task Name"
-          />
-          <input
-            type="number"
-            value={newTask.duration}
-            onChange={(e) => setNewTask({ ...newTask, duration: e.target.value })}
-            placeholder="Duration"
-          />
-          <input
-            type="date"
-            value={newTask.startDate}
-            onChange={(e) => setNewTask({ ...newTask, startDate: e.target.value })}
-          />
-          <input
-            type="date"
-            value={newTask.endDate}
-            onChange={(e) => setNewTask({ ...newTask, endDate: e.target.value })}
-          />
-          <textarea
-            value={newTask.description}
-            onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
-            placeholder="Task Description"
-          />
-          <button onClick={handleAddTask}>Create</button>
         </div>
       </div>
     </div>
@@ -278,50 +282,46 @@ const Profile = () => {
 const styles = {
   container: {
     display: "flex",
-    justifyContent: "center",
-    alignItems: "flex-start",
     flexDirection: "column",
-    padding: "2rem",
-    backgroundColor: "#f4f4f9",
+    height: "100vh",
   },
-  profile: {
+  topbar: {
+    backgroundColor: "#0077b5",
+    color: "white",
+    padding: "10px 20px",
     textAlign: "center",
-    padding: "2rem",
-    border: "1px solid #ddd",
-    borderRadius: "8px",
-    backgroundColor: "white",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-    marginBottom: "2rem",
-    width: "100%",
+    fontSize: "2rem",
   },
-  projectTaskContainer: {
+  mainContent: {
     display: "flex",
-    justifyContent: "space-between",
-    width: "100%",
-    gap: "2rem",
-  },
-  projects: {
     flex: 1,
-    padding: "1rem",
+    gap: "20px",
+    padding: "20px",
+  },
+  sidebar: {
+    width: "25%",
+    backgroundColor: "#f4f4f9",
+    padding: "20px",
+    borderRadius: "8px",
+    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+  },
+  content: {
+    width: "70%",
+    padding: "20px",
     backgroundColor: "#fff",
     borderRadius: "8px",
     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
   },
-  tasks: {
-    flex: 1,
-    padding: "1rem",
-    backgroundColor: "#fff",
-    borderRadius: "8px",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+  image: {
+    borderRadius: "50%",
+    width: "100px",
+    height: "100px",
+    marginBottom: "1rem",
   },
   table: {
     width: "100%",
     borderCollapse: "collapse",
     marginBottom: "1rem",
-  },
-  tableCell: {
-    padding: "8px",
-    border: "1px solid #ddd",
   },
   button: {
     backgroundColor: "#0077b5",
@@ -333,22 +333,6 @@ const styles = {
     fontSize: "1rem",
     fontWeight: "500",
     transition: "background-color 0.2s ease",
-  },
-  image: {
-    borderRadius: "50%",
-    width: "100px",
-    height: "100px",
-    marginBottom: "1rem",
-  },
-  email: {
-    fontSize: "1rem",
-    color: "#333",
-    marginBottom: "0.5rem",
-  },
-  lastLogin: {
-    color: "#888",
-    fontSize: "0.9rem",
-    marginBottom: "1rem",
   },
 };
 

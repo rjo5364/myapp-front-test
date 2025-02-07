@@ -163,10 +163,18 @@ const Profile = () => {
 
       <div style={styles.mainContent}>
         <div style={styles.sidebar}>
-          <h2>Welcome, {user.name}!</h2>
+          {/* <h2>Welcome, {user.name}!</h2>
           {user.profilePicture && <img src={user.profilePicture} alt="Profile" style={styles.image} />}
           <p>Email: {user.email}</p>
-          <p>Last login: {new Date(user.lastLogin).toLocaleString()}</p>
+          <p>Last login: {new Date(user.lastLogin).toLocaleString()}</p> */}
+           <div style={styles.container}>
+                  {user.profilePicture && <img src={user.profilePicture} alt="Profile" style={styles.image} />}
+                  <div style={styles.textContainer}>
+                  <h2>Welcome, {user.name}!</h2>
+                  <p>Email: {user.email}</p>
+                  <p style={styles.lastLogin}>Last login: {new Date(user.lastLogin).toLocaleString()}</p>
+                </div>
+            </div>
 
           <div style={styles.formContainer}>
             <h3>New Project</h3>
@@ -301,6 +309,15 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     height: "100vh",
+  },
+  textContainer: {
+    display: "flex",
+    flexDirection: "column", 
+    justifyContent: "center", 
+  },
+  lastLogin: {
+    fontSize: "0.875rem",    
+    marginTop: "10px",       
   },
   topbar: {
     backgroundColor: "#0077b5",

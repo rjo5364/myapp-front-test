@@ -21,7 +21,6 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        // Fetch user profile
         const profileResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/profile`, {
           credentials: "include",
           headers: { "Accept": "application/json", "Content-Type": "application/json" },
@@ -30,23 +29,18 @@ const Profile = () => {
         const profileData = await profileResponse.json();
         setUser(profileData);
 
-        // Fetch user's projects
-        const projectsResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/projects`, {
-          credentials: "include",
-        });
+        // Fetch user's projects and tasks
+        const projectsResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/projects`, { credentials: "include" });
         const projectsData = await projectsResponse.json();
         setProjects(projectsData);
 
-        // Fetch user's tasks
-        const tasksResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/tasks`, {
-          credentials: "include",
-        });
+        const tasksResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/tasks`, { credentials: "include" });
         const tasksData = await tasksResponse.json();
         setTasks(tasksData);
       } catch (err) {
         setError(err.message);
         if (err.message === "User not authenticated") {
-          setTimeout(() => navigate("/"), 2000); // Redirect to login if user is not authenticated
+          setTimeout(() => navigate("/"), 2000); // Redirect to login
         }
       } finally {
         setLoading(false);

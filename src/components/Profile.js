@@ -342,6 +342,7 @@ const styles = {
     width: "100%",
     borderCollapse: "collapse",
     marginBottom: "1rem",
+    border: "1px solid lightgray", // Added border for light grey lines
   },
   button: {
     backgroundColor: "#0077b5",
@@ -357,7 +358,7 @@ const styles = {
   formContainer: {
     display: "flex",
     flexDirection: "column",
-    gap: "0px",
+    gap: "5px",
     marginBottom: "5px",
   },
   logoutButton: {
@@ -374,7 +375,6 @@ const styles = {
     transition: "background-color 0.2s ease",
     marginLeft: "auto",
     marginRight: "auto",
-    
   },
 };
 

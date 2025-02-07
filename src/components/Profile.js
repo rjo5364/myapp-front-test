@@ -167,17 +167,20 @@ const Profile = () => {
           {user.profilePicture && <img src={user.profilePicture} alt="Profile" style={styles.image} />}
           <p>Email: {user.email}</p>
           <p>Last login: {new Date(user.lastLogin).toLocaleString()}</p>
-          <button onClick={handleLogout} style={styles.button}>Logout</button>
 
           <div style={styles.formContainer}>
             <h3>New Project</h3>
+            <label htmlFor="projectName">Project Name</label>
             <input
+              id="projectName"
               type="text"
               value={newProject.name}
               onChange={(e) => setNewProject({ ...newProject, name: e.target.value })}
               placeholder="Project Name"
             />
+            <label htmlFor="projectDescription">Description</label>
             <textarea
+              id="projectDescription"
               value={newProject.description}
               onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
               placeholder="Project Description"
@@ -185,7 +188,9 @@ const Profile = () => {
             <button onClick={handleAddProject}>Create</button>
 
             <h3>New Task</h3>
+            <label htmlFor="selectProject">Select Project</label>
             <select
+              id="selectProject"
               value={newTask.project}
               onChange={(e) => setNewTask({ ...newTask, project: e.target.value })}
             >
@@ -196,35 +201,47 @@ const Profile = () => {
                 </option>
               ))}
             </select>
+            <label htmlFor="taskName">Task Name</label>
             <input
+              id="taskName"
               type="text"
               value={newTask.name}
               onChange={(e) => setNewTask({ ...newTask, name: e.target.value })}
               placeholder="Task Name"
             />
+            <label htmlFor="taskDuration">Duration</label>
             <input
+              id="taskDuration"
               type="number"
               value={newTask.duration}
               onChange={(e) => setNewTask({ ...newTask, duration: e.target.value })}
               placeholder="Duration"
             />
+            <label htmlFor="taskStartDate">Start Date</label>
             <input
+              id="taskStartDate"
               type="date"
               value={newTask.startDate}
               onChange={(e) => setNewTask({ ...newTask, startDate: e.target.value })}
             />
+            <label htmlFor="taskEndDate">End Date</label>
             <input
+              id="taskEndDate"
               type="date"
               value={newTask.endDate}
               onChange={(e) => setNewTask({ ...newTask, endDate: e.target.value })}
             />
+            <label htmlFor="taskDescription">Description</label>
             <textarea
+              id="taskDescription"
               value={newTask.description}
               onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
               placeholder="Task Description"
             />
             <button onClick={handleAddTask}>Create</button>
           </div>
+
+          <button onClick={handleLogout} style={styles.logoutButton}>Logout</button>
         </div>
 
         <div style={styles.content}>
@@ -304,6 +321,9 @@ const styles = {
     padding: "20px",
     borderRadius: "8px",
     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
   },
   content: {
     width: "70%",
@@ -332,6 +352,25 @@ const styles = {
     cursor: "pointer",
     fontSize: "1rem",
     fontWeight: "500",
+    transition: "background-color 0.2s ease",
+  },
+  formContainer: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px",
+    marginBottom: "20px",
+  },
+  logoutButton: {
+    backgroundColor: "#e60000",
+    color: "white",
+    border: "none",
+    padding: "12px 24px",
+    borderRadius: "4px",
+    width: "75%",
+    cursor: "pointer",
+    fontSize: "1rem",
+    fontWeight: "500",
+    marginTop: "auto",
     transition: "background-color 0.2s ease",
   },
 };

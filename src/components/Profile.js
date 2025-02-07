@@ -305,7 +305,7 @@ const styles = {
   topbar: {
     backgroundColor: "#0077b5",
     color: "white",
-    padding: "10px 20px",
+    padding: "30px 20px",
     textAlign: "left",
     fontSize: "2rem",
   },
@@ -357,8 +357,8 @@ const styles = {
   formContainer: {
     display: "flex",
     flexDirection: "column",
-    gap: "10px",
-    marginBottom: "20px",
+    gap: "0px",
+    marginBottom: "5px",
   },
   logoutButton: {
     backgroundColor: "#e60000",

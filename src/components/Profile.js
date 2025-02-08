@@ -130,6 +130,23 @@ const Profile = () => {
     }
   };
 
+  const handleDeleteProject = async (projectId) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/projects/${projectId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+  
+      if (response.ok) {
+        setProjects(projects.filter((project) => project._id !== projectId));
+      } else {
+        throw new Error("Error deleting project");
+      }
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   if (loading) {
     return (
       <div style={styles.container}>
@@ -260,7 +277,8 @@ const Profile = () => {
                   <td>{project.name}</td>
                   <td>{project.description}</td>
                   <td>
-                    <button onClick={() => handleMarkComplete(project._id)}>Done</button></td>
+                    <button onClick={() => handleDeleteProject(project._id)}>Done</button>
+                  </td>
                 </tr>
               ))}
             </tbody>

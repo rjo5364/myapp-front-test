@@ -259,7 +259,8 @@ const Profile = () => {
                 <tr key={project._id}>
                   <td>{project.name}</td>
                   <td>{project.description}</td>
-                  <td><button>Done</button></td>
+                  <td>
+                    <button onClick={() => handleMarkComplete(project._id)}>Done</button></td>
                 </tr>
               ))}
             </tbody>

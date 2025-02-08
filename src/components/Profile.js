@@ -14,6 +14,8 @@ const Profile = () => {
     startDate: "",
     endDate: "",
   });
+  const [editProject, setEditProject] = useState(null);
+  const [editTask, setEditTask] = useState(null); 
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -40,7 +42,7 @@ const Profile = () => {
       } catch (err) {
         setError(err.message);
         if (err.message === "User not authenticated") {
-          setTimeout(() => navigate("/"), 2000); // Redirect to login
+          setTimeout(() => navigate("/"), 2000); // Redirects to login
         }
       } finally {
         setLoading(false);
@@ -113,6 +115,51 @@ const Profile = () => {
     }
   };
 
+   // Handler for updating project
+   const handleUpdateProject = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/projects/${editProject._id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...editProject }),
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        const updatedProject = await response.json();
+        setProjects(projects.map((project) => (project._id === updatedProject._id ? updatedProject : project)));
+        setEditProject(null); // Reset edit mode
+      } else {
+        throw new Error("Error updating project");
+      }
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  // Handler for updating task
+  const handleUpdateTask = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/tasks/${editTask._id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...editTask }),
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        const updatedTask = await response.json();
+        setTasks(tasks.map((task) => (task._id === updatedTask._id ? updatedTask : task)));
+        setEditTask(null); // Reset edit mode
+      } else {
+        throw new Error("Error updating task");
+      }
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  //handler for marking tasks as complete
   const handleMarkComplete = async (taskId) => {
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/tasks/${taskId}`, {
@@ -130,6 +177,7 @@ const Profile = () => {
     }
   };
 
+  //handler for deleting projects
   const handleDeleteProject = async (projectId) => {
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/projects/${projectId}`, {
@@ -278,6 +326,7 @@ const Profile = () => {
                   <td>{project.description}</td>
                   <td>
                     <button onClick={() => handleDeleteProject(project._id)}>Done</button>
+                    <button onClick={() => setEditProject(project)}>Update</button>
                   </td>
                 </tr>
               ))}
@@ -304,6 +353,7 @@ const Profile = () => {
                   <td>{task.duration}</td>
                   <td>
                     <button onClick={() => handleMarkComplete(task._id)}>Done</button>
+                    <button onClick={() => setEditTask(task)}>Update</button>
                   </td>
                 </tr>
               ))}
@@ -311,6 +361,44 @@ const Profile = () => {
           </table>
         </div>
       </div>
+       {/* Editing Modal or Form for Project */}
+       {editProject && (
+        <div>
+          <h3>Edit Project</h3>
+          <input
+            type="text"
+            value={editProject.name}
+            onChange={(e) => setEditProject({ ...editProject, name: e.target.value })}
+          />
+          <textarea
+            value={editProject.description}
+            onChange={(e) => setEditProject({ ...editProject, description: e.target.value })}
+          />
+          <button onClick={handleUpdateProject}>Save</button>
+        </div>
+      )}
+
+      {/* Editing Modal or Form for Task */}
+      {editTask && (
+        <div>
+          <h3>Edit Task</h3>
+          <input
+            type="text"
+            value={editTask.name}
+            onChange={(e) => setEditTask({ ...editTask, name: e.target.value })}
+          />
+          <textarea
+            value={editTask.description}
+            onChange={(e) => setEditTask({ ...editTask, description: e.target.value })}
+          />
+          <input
+            type="number"
+            value={editTask.duration}
+            onChange={(e) => setEditTask({ ...editTask, duration: e.target.value })}
+          />
+          <button onClick={handleUpdateTask}>Save</button>
+        </div>
+      )}
     </div>
   );
 };
@@ -368,9 +456,10 @@ const styles = {
   },
   table: {
     width: "100%",
-    borderCollapse: "collapse",
+    borderCollapse: "separate",
     marginBottom: "1rem",
-    border: "1px solid lightgray", // Added border for light grey lines
+    border: "1px solid lightgray",
+    textAlign: "left", 
   },
   button: {
     backgroundColor: "#0077b5",

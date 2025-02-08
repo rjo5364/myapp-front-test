@@ -356,29 +356,11 @@ const Profile = () => {
                     <button onClick={() => setEditTask(task)}>Update</button>
                   </td>
                 </tr>
+                
               ))}
             </tbody>
           </table>
-        </div>
-      </div>
-       {/* Editing Modal or Form for Project */}
-       {editProject && (
-        <div>
-          <h3>Edit Project</h3>
-          <input
-            type="text"
-            value={editProject.name}
-            onChange={(e) => setEditProject({ ...editProject, name: e.target.value })}
-          />
-          <textarea
-            value={editProject.description}
-            onChange={(e) => setEditProject({ ...editProject, description: e.target.value })}
-          />
-          <button onClick={handleUpdateProject}>Save</button>
-        </div>
-      )}
-
-      {/* Editing Modal or Form for Task */}
+          {/* Editing Modal or Form for Task */}
       {editTask && (
         <div>
           <h3>Edit Task</h3>
@@ -399,6 +381,25 @@ const Profile = () => {
           <button onClick={handleUpdateTask}>Save</button>
         </div>
       )}
+
+      {/* Editing Modal or Form for Project */}
+      {editProject && (
+        <div>
+          <h3>Edit Project</h3>
+          <input
+            type="text"
+            value={editProject.name}
+            onChange={(e) => setEditProject({ ...editProject, name: e.target.value })}
+          />
+          <textarea
+            value={editProject.description}
+            onChange={(e) => setEditProject({ ...editProject, description: e.target.value })}
+          />
+          <button onClick={handleUpdateProject}>Save</button>
+        </div>
+      )}
+        </div>
+      </div>
     </div>
   );
 };

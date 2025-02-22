@@ -1,0 +1,70 @@
+name: Test and Deploy React App to Vercel
+
+on:
+  push:
+    branches:
+      - master 
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      REACT_APP_BACKEND_URL: ${{ secrets.REACT_APP_BACKEND_URL }}
+
+    outputs:
+      deploy_allowed: ${{ steps.check_threshold.outputs.deploy_allowed }}  
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Jest Tests
+        id: test_results
+        run: |
+          npm test -- --json --outputFile=test-results.json --watchAll=false --forceExit --detectOpenHandles --runInBand || true
+        
+          TOTAL_TESTS=$(jq '.numTotalTests' test-results.json)
+          PASSED_TESTS=$(jq '.numPassedTests' test-results.json)
+          FAILED_TESTS=$(jq '.numFailedTests' test-results.json)
+    
+          PASS_PERCENTAGE=$((100 * PASSED_TESTS / TOTAL_TESTS))
+    
+          echo "Total Tests: $TOTAL_TESTS"
+          echo "Passed Tests: $PASSED_TESTS"
+          echo "Failed Tests: $FAILED_TESTS"
+          echo "Pass Percentage: $PASS_PERCENTAGE%"
+    
+          echo "PASS_PERCENTAGE=$PASS_PERCENTAGE" >> $GITHUB_ENV
+    
+
+      - name: Check Test Threshold
+        id: check_threshold
+        run: |
+          MINIMUM_PASS_PERCENT=80  # Adjust threshold as needed
+          
+          if [ "$PASS_PERCENTAGE" -ge "$MINIMUM_PASS_PERCENT" ]; then
+            echo "Tests passed threshold, proceeding with deployment."
+            echo "deploy_allowed=true" >> $GITHUB_OUTPUT
+          else
+            echo "Tests failed threshold, skipping deployment."
+            echo "deploy_allowed=false" >> $GITHUB_OUTPUT
+          fi
+
+  deploy:
+    needs: test
+    if: needs.test.outputs.deploy_allowed == 'true'  
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Deploy on Vercel
+        run: |
+          curl -X POST -d '{}' \
+          "https://api.vercel.com/v1/integrations/deploy/prj_JIo7X2kECCkSCe3cmbqLFr5IQTpE/KQyFzACBPy?buildCache=false"
